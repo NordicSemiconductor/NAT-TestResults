@@ -1,0 +1,71 @@
+{
+  "name": "@nordicsemiconductor/nat-testreporter",
+  "version": "0.0.0-development",
+  "description": "Provides an analytics dashboard for the NAT test data received from the NAT-TestServer",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NordicSemiconductor/NAT-TestReporter.git"
+  },
+  "keywords": [
+    "NAT-Test",
+    "Nordic Semiconductor"
+  ],
+  "author": "Nordic Semiconductor ASA | nordicsemi.no",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/NordicSemiconductor/NAT-TestReporter/issues"
+  },
+  "homepage": "https://github.com/NordicSemiconductor/NAT-TestReporter#readme",
+  "devDependencies": {
+    "@aws-cdk/aws-cognito": "^1.36.1",
+    "@aws-cdk/aws-iam": "^1.36.1",
+    "@aws-cdk/aws-lambda": "^1.36.1",
+    "@aws-cdk/aws-s3": "^1.36.1",
+    "@aws-cdk/core": "^1.36.1",
+    "@bifravst/athena-helpers": "^6.3.0",
+    "@bifravst/cloudformation-helpers": "^2.0.0",
+    "@bifravst/code-style": "^7.1.10",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
+    "@types/chalk": "^2.2.0",
+    "@types/node": "^13.13.4",
+    "aws-cdk": "^1.36.1",
+    "aws-sdk": "^2.668.0",
+    "chalk": "^4.0.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.2",
+    "prettier": "^2.0.5",
+    "semantic-release": "^17.0.7",
+    "typescript": "^3.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e",
+      "pre-commit": "lint-staged && npx tsc"
+    }
+  },
+  "lint-staged": {
+    "*.{md,json,yaml,yml}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --ext .js,.ts"
+    ]
+  },
+  "release": {
+    "branches": [
+      "saga"
+    ],
+    "remoteTags": true,
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github"
+    ]
+  },
+  "dependencies": {}
+}
