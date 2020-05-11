@@ -1,61 +1,85 @@
 import {
-	AthenaTableArrayFieldType,
-	AthenaTableField,
-	AthenaTableScalarFieldType,
-	AthenaTableStructFieldType,
+	ArrayFieldType,
+	Field,
+	ScalarFieldType,
+	StructFieldType,
 } from '@bifravst/athena-helpers'
 
 /**
  * This defines the table structure for querying device data
  */
 export const natLogMessageFields: {
-	[key: string]: AthenaTableField
+	[key: string]: Field
 } = {
 	Received: {
-		type: AthenaTableScalarFieldType.string,
+		type: ScalarFieldType.string,
 	},
 	Protocol: {
-		type: AthenaTableScalarFieldType.string,
+		type: ScalarFieldType.string,
 	},
 	IP: {
-		type: AthenaTableScalarFieldType.string,
+		type: ScalarFieldType.string,
 	},
 	Timeout: {
-		type: AthenaTableScalarFieldType.boolean,
+		type: ScalarFieldType.boolean,
 	},
-	Data: {
-		type: AthenaTableStructFieldType.struct,
+	Message: {
+		type: StructFieldType.struct,
 		fields: {
 			op: {
-				type: AthenaTableScalarFieldType.string,
+				type: ScalarFieldType.string,
 			},
 			ip: {
-				type: AthenaTableArrayFieldType.array,
-				items: AthenaTableScalarFieldType.string,
+				type: ArrayFieldType.array,
+				items: ScalarFieldType.string,
 			},
 			cell_id: {
-				type: AthenaTableScalarFieldType.int,
+				type: ScalarFieldType.int,
 			},
 			ue_mode: {
-				type: AthenaTableScalarFieldType.int,
+				type: ScalarFieldType.int,
 			},
 			lte_mode: {
-				type: AthenaTableScalarFieldType.int,
+				type: ScalarFieldType.int,
 			},
 			nbiot_mode: {
-				type: AthenaTableScalarFieldType.int,
+				type: ScalarFieldType.int,
 			},
 			gps_mode: {
-				type: AthenaTableScalarFieldType.int,
+				type: ScalarFieldType.int,
 			},
 			iccid: {
-				type: AthenaTableScalarFieldType.string,
+				type: ScalarFieldType.string,
 			},
 			imei: {
-				type: AthenaTableScalarFieldType.string,
+				type: ScalarFieldType.string,
 			},
 			interval: {
-				type: AthenaTableScalarFieldType.int,
+				type: ScalarFieldType.int,
+			},
+		},
+	},
+	simIssuer: {
+		type: StructFieldType.struct,
+		fields: {
+			iin: {
+				type: ScalarFieldType.int,
+			},
+			issuerIdentifierNumber: {
+				type: ScalarFieldType.string,
+			},
+			countryCode: {
+				type: ScalarFieldType.int,
+			},
+			countryName: {
+				type: ScalarFieldType.string,
+			},
+			companyName: {
+				type: ScalarFieldType.string,
+			},
+			companyURLs: {
+				type: ArrayFieldType.array,
+				items: ScalarFieldType.string,
 			},
 		},
 	},

@@ -1,8 +1,8 @@
 import { CommandDefinition } from './cli'
 import {
 	athenaQuery,
-	createAthenaTableSQL,
-	parseAthenaResult,
+	createTableSQL,
+	parseResult,
 } from '@bifravst/athena-helpers'
 import { Athena } from 'aws-sdk'
 import {
@@ -111,7 +111,7 @@ export const athenaCommand = ({
 				)
 			},
 		})
-		const dbs = parseAthenaResult({
+		const dbs = parseResult({
 			ResultSet: await query({
 				QueryString: `SHOW DATABASES`,
 			}),
@@ -160,7 +160,7 @@ export const athenaCommand = ({
 			} catch (error) {
 				if (setup) {
 					console.log(chalk.magenta(`Creating table...`))
-					const createSQL = createAthenaTableSQL({
+					const createSQL = createTableSQL({
 						database: dbName,
 						table: tableName,
 						s3Location,

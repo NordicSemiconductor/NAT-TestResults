@@ -1,6 +1,7 @@
 import * as program from 'commander'
 import * as chalk from 'chalk'
 import { athenaCommand } from './athenaCommand'
+import { appConfigCommand } from './appConfigCommand'
 import { stackOutput } from '@bifravst/cloudformation-helpers'
 import { CloudFormation } from 'aws-sdk'
 import { defaultStackName } from '../aws/stackName'
@@ -22,21 +23,33 @@ const config = async ({
 	stackName: string
 	serverStackName: string
 }) => {
-	const { bucketName: queryResultsBucketName } = await so<{
+	const {
+		bucketName: queryResultsBucketName,
+		userPoolClientId,
+		userPoolId,
+		identityPoolId,
+	} = await so<{
 		bucketName: string
+		userPoolClientId: string
+		userPoolId: string
+		identityPoolId: string
 	}>(stackName)
-	const { bucketName: logsBucketName } = await so<{ bucketName: string }>(
-		serverStackName,
-	)
+	const { bucketName: logsBucketName } = await so<{
+		bucketName: string
+	}>(serverStackName)
 	return {
 		logsBucketName,
 		queryResultsBucketName,
+		userPoolClientId,
+		userPoolId,
+		identityPoolId,
 	}
 }
 
 export const cli = async (args: {
 	stackName?: string
 	serverStackName: string
+	region: string
 }) => {
 	program.description('NAT Test Reporter Command Line Interface')
 	const stackName = args.stackName || defaultStackName
@@ -54,6 +67,14 @@ export const cli = async (args: {
 			stackName,
 			LogBucketName: cfg.logsBucketName,
 			QueryResultsBucketName: cfg.queryResultsBucketName,
+		}),
+		appConfigCommand({
+			stackName,
+			region: args.region,
+			LogBucketName: cfg.logsBucketName,
+			cognitoIdentityPoolId: cfg.identityPoolId,
+			cognitoUserPoolId: cfg.userPoolId,
+			cognitoUserPoolClientId: cfg.userPoolClientId,
 		}),
 	]
 

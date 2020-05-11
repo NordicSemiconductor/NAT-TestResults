@@ -1,0 +1,14 @@
+{
+  "extends": "@bifravst/code-style/tsconfig.json",
+  "include": ["./**/*.tsx", "./**/*.ts"],
+  "compilerOptions": {
+    "outDir": "../dist-web/",
+    "esModuleInterop": true,
+    "module": "es6",
+    "target": "es5",
+    "lib": ["es6", "dom"],
+    "jsx": "react",
+    "moduleResolution": "node",
+    "allowJs": true
+  }
+}

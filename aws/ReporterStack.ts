@@ -34,9 +34,14 @@ export class ReporterStack extends CloudFormation.Stack {
 			userPoolName: id,
 			signInAliases: {
 				email: true,
+				username: false,
 			},
 			autoVerify: {
 				email: true,
+			},
+			selfSignUpEnabled: true,
+			passwordPolicy: {
+				requireSymbols: false,
 			},
 		})
 		const userPoolClient = new Cognito.UserPoolClient(this, 'userPoolClient', {

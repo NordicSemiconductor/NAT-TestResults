@@ -37,6 +37,7 @@
     "@types/node": "^13.13.5",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
+    "@types/styled-components": "^5.1.0",
     "aws-cdk": "^1.38.0",
     "aws-sdk": "^2.673.0",
     "chalk": "^4.0.0",
@@ -66,9 +67,13 @@
     "*.{md,json,yaml,yml}": [
       "prettier --write"
     ],
-    "*.{ts,tsx}": [
+    "web/*.{ts,tsx}": [
       "prettier --write",
-      "eslint --ext .js,.ts"
+      "eslint --parser-options {\"project\":\"./web/tsconfig.json\"}  --ext .js,.ts"
+    ],
+    "{aws,cli}/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --parser-options {\"project\":\"./tsconfig.json\"} --ext .js,.ts"
     ]
   },
   "release": {
@@ -86,6 +91,7 @@
     "@amcharts/amcharts4": "^4.9.19",
     "@aws-amplify/ui-react": "^0.2.5",
     "aws-amplify": "^3.0.10",
+    "aws-amplify-react": "^4.1.9",
     "fp-ts": "^2.5.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
