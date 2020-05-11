@@ -3,7 +3,10 @@
   "version": "0.0.0-development",
   "description": "Provides an analytics dashboard for the NAT test data received from the NAT-TestServer",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack --config-name production",
+    "start": "webpack-dev-server --config-name development --open --config ./web/webpack.config.js",
+    "postinstall": "check-node-version --package"
   },
   "repository": {
     "type": "git",
@@ -20,26 +23,38 @@
   },
   "homepage": "https://github.com/NordicSemiconductor/NAT-TestReporter#readme",
   "devDependencies": {
-    "@aws-cdk/aws-cognito": "^1.36.1",
-    "@aws-cdk/aws-iam": "^1.36.1",
-    "@aws-cdk/aws-lambda": "^1.36.1",
-    "@aws-cdk/aws-s3": "^1.36.1",
-    "@aws-cdk/core": "^1.36.1",
-    "@bifravst/athena-helpers": "^6.3.0",
-    "@bifravst/cloudformation-helpers": "^2.0.0",
-    "@bifravst/code-style": "^7.1.10",
+    "@aws-cdk/aws-cognito": "^1.38.0",
+    "@aws-cdk/aws-iam": "^1.38.0",
+    "@aws-cdk/aws-lambda": "^1.38.0",
+    "@aws-cdk/aws-s3": "^1.38.0",
+    "@aws-cdk/core": "^1.38.0",
+    "@bifravst/athena-helpers": "^7.1.0",
+    "@bifravst/cloudformation-helpers": "^3.0.0",
+    "@bifravst/code-style": "^7.1.11",
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-angular": "^8.3.4",
     "@types/chalk": "^2.2.0",
-    "@types/node": "^13.13.4",
-    "aws-cdk": "^1.36.1",
-    "aws-sdk": "^2.668.0",
+    "@types/node": "^13.13.5",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "aws-cdk": "^1.38.0",
+    "aws-sdk": "^2.673.0",
     "chalk": "^4.0.0",
+    "check-node-version": "^4.0.3",
+    "css-loader": "^3.5.3",
+    "eslint-plugin-react": "^7.19.0",
+    "handlebars": "^4.7.6",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "semantic-release": "^17.0.7",
-    "typescript": "^3.8.3"
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^7.0.3",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
   },
   "husky": {
     "hooks": {
@@ -67,5 +82,18 @@
       "@semantic-release/github"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "@amcharts/amcharts4": "^4.9.19",
+    "@aws-amplify/ui-react": "^0.2.5",
+    "aws-amplify": "^3.0.10",
+    "fp-ts": "^2.5.3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-leaflet": "^2.7.0",
+    "styled-components": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
 }
