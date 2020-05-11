@@ -43,19 +43,19 @@ describe('summaryToChartData', () => {
 			]),
 		).toEqual([
 			{
-				networkIdentifier: '24202/894504',
-				maxTCP: 11524,
-				maxUDP: -64,
+				networkIdentifier: 'Telia, SIM: Telia Sonera A/S',
+				maxTCP: 11524 / 60,
+				maxUDP: -64 / 60,
 			},
 			{
-				networkIdentifier: '24201/893108',
-				maxTCP: 5122,
-				maxUDP: -49,
+				networkIdentifier: 'Telenor, SIM: KPN Telecom B.V., Card Services',
+				maxTCP: 5122 / 60,
+				maxUDP: -49 / 60,
 			},
 			{
-				networkIdentifier: '24201/8988280',
-				maxTCP: 675,
-				maxUDP: -121,
+				networkIdentifier: 'Telenor, SIM: 1NCE GmbH',
+				maxTCP: 675 / 60,
+				maxUDP: -121 / 60,
 			},
 		])
 	})

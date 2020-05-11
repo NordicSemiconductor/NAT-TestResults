@@ -1,3 +1,7 @@
+import { filter as filterOperator } from 'mcc-mnc-list'
+import { identifyIssuer } from 'e118-iin-list'
+import { isSome } from 'fp-ts/lib/Option'
+
 export enum Protocol {
 	TCP = 'TCP',
 	UDP = 'UDP',
@@ -16,8 +20,17 @@ export type ChartItem = {
 	maxTCP: number
 }
 
-const identifyNetwork = (summary: SummaryItem): string =>
-	`${summary.mccmnc}/${summary.simIIN}`
+const identifyNetwork = (summary: SummaryItem): string => {
+	let simIssuer = 'unknown'
+	const issuer = identifyIssuer(`${summary.simIIN}`)
+	if (isSome(issuer)) {
+		simIssuer = issuer.value.companyName
+	}
+	const op = filterOperator({ mccmnc: summary.mccmnc })[0]
+	return `${
+		op ? op.brand : `Unknown operator (${summary.mccmnc})`
+	}, SIM: ${simIssuer}`
+}
 
 /**
  * Converts the data loaded from Athena to the format used by the Chart
@@ -51,4 +64,8 @@ export const summaryToChartData = (summary: SummaryItem[]): ChartItem[] =>
 		}, [] as ChartItem[])
 		.sort(({ maxUDP: udp1 }, { maxUDP: udp2 }) => udp2 - udp1)
 		.sort(({ maxTCP: tcp1 }, { maxTCP: tcp2 }) => tcp2 - tcp1)
-		.map((entry) => ({ ...entry, maxUDP: -entry.maxUDP }))
+		.map((entry) => ({
+			...entry,
+			maxTCP: entry.maxTCP / 60,
+			maxUDP: -entry.maxUDP / 60,
+		}))
