@@ -1,9 +1,5 @@
 import { CommandDefinition } from './cli'
-import {
-	athenaQuery,
-	createTableSQL,
-	parseResult,
-} from '@bifravst/athena-helpers'
+import { query, createTableSQL, parseResult } from '@bifravst/athena-helpers'
 import { Athena } from 'aws-sdk'
 import {
 	DataBaseName,
@@ -93,7 +89,7 @@ export const athenaCommand = ({
 			chalk.gray(`Athena workgroup ${chalk.blue(WorkGroup)} exists.`),
 		)
 
-		const query = athenaQuery({
+		const q = query({
 			athena,
 			WorkGroup,
 			debugLog: (...args: any) => {
@@ -112,14 +108,14 @@ export const athenaCommand = ({
 			},
 		})
 		const dbs = parseResult({
-			ResultSet: await query({
+			ResultSet: await q({
 				QueryString: `SHOW DATABASES`,
 			}),
 		})
 		if (!dbs.find(({ database_name: db }) => db === dbName)) {
 			if (setup) {
 				console.log(chalk.magenta(`Creating database...`))
-				await query({
+				await q({
 					QueryString: `CREATE DATABASE ${dbName}`,
 				})
 			} else {
@@ -141,7 +137,7 @@ export const athenaCommand = ({
 
 		if (recreate) {
 			console.log(chalk.magenta(`Dropping table...`))
-			await query({ QueryString: `DROP TABLE ${dbName}.${LogsTableName}` })
+			await q({ QueryString: `DROP TABLE ${dbName}.${LogsTableName}` })
 		}
 
 		const checkTable = async ({
@@ -154,7 +150,7 @@ export const athenaCommand = ({
 			setup: boolean
 		}) => {
 			try {
-				await query({
+				await q({
 					QueryString: `DESCRIBE ${dbName}.${tableName}`,
 				})
 			} catch (error) {
@@ -167,7 +163,7 @@ export const athenaCommand = ({
 						fields: natLogMessageFields,
 					})
 					console.log(chalk.magenta(createSQL))
-					await query({
+					await q({
 						QueryString: createSQL,
 					})
 				} else {

@@ -1,9 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import Amplify from 'aws-amplify'
-import Athena from 'aws-sdk/clients/athena'
-import { GlobalStyle } from './styles/global'
-import { Authenticate } from './Authenticate'
 
 import '@aws-amplify/ui/dist/style.css'
 
@@ -36,29 +33,15 @@ export const boot = ({ target }: { target: HTMLElement }) => {
 	})
 
 	ReactDOM.render(
-		<>
-			<GlobalStyle />
-			<Authenticate>
-				<React.StrictMode>
-					<App />
-				</React.StrictMode>
-			</Authenticate>
-		</>,
+		<App
+			athenaConfig={{
+				workGroup: GLOBAL_ATHENA_WORKGROUP,
+				dataBase: GLOBAL_ATHENA_DATABASE,
+				logTable: GLOBAL_ATHENA_TABLE,
+				bucketName: GLOBAL_ATHENA_BUCKET,
+				region: GLOBAL_REGION,
+			}}
+		/>,
 		target,
 	)
 }
-
-export type AthenaContext = {
-	athena: Athena
-	workGroup: string
-	dataBase: string
-	rawDataTable: string
-}
-
-const AthenaContext = React.createContext<AthenaContext>({
-	athena: new Athena({ region: 'us-east-1' }),
-	workGroup: '',
-	dataBase: '',
-	rawDataTable: '',
-})
-export const AthenaConsumer = AthenaContext.Consumer

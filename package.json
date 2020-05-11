@@ -3,10 +3,10 @@
   "version": "0.0.0-development",
   "description": "Provides an analytics dashboard for the NAT test data received from the NAT-TestServer",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx webpack --config-name production --config ./web/webpack.config.js",
     "start": "webpack-dev-server --config-name development --open --config ./web/webpack.config.js",
-    "postinstall": "check-node-version --package"
+    "postinstall": "check-node-version --package",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,16 +28,18 @@
     "@aws-cdk/aws-lambda": "^1.38.0",
     "@aws-cdk/aws-s3": "^1.38.0",
     "@aws-cdk/core": "^1.38.0",
-    "@bifravst/athena-helpers": "^7.1.0",
+    "@bifravst/athena-helpers": "^8.0.0",
     "@bifravst/cloudformation-helpers": "^3.0.0",
     "@bifravst/code-style": "^7.1.11",
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-angular": "^8.3.4",
     "@types/chalk": "^2.2.0",
+    "@types/jest": "^25.2.1",
     "@types/node": "^13.13.5",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
     "@types/styled-components": "^5.1.0",
+    "@types/uuid": "^7.0.3",
     "aws-cdk": "^1.38.0",
     "aws-sdk": "^2.673.0",
     "chalk": "^4.0.0",
@@ -46,10 +48,12 @@
     "eslint-plugin-react": "^7.19.0",
     "handlebars": "^4.7.6",
     "husky": "^4.2.5",
+    "jest": "^26.0.1",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "semantic-release": "^17.0.7",
     "style-loader": "^1.2.1",
+    "ts-jest": "^25.5.1",
     "ts-loader": "^7.0.3",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
@@ -87,18 +91,37 @@
     ]
   },
   "dependencies": {
-    "@amcharts/amcharts4": "^4.9.19",
+    "@amcharts/amcharts4": "^4.9.20",
     "@aws-amplify/ui-react": "^0.2.5",
     "aws-amplify": "^3.0.10",
     "aws-amplify-react": "^4.1.9",
     "fp-ts": "^2.6.0",
+    "p-queue": "^6.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.1.0",
+    "uuid": "^8.0.0"
   },
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
+  },
+  "jest": {
+    "testURL": "http://localhost",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": ".+\\.spec\\.ts$",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": true
+      }
+    }
   }
 }

@@ -1,11 +1,10 @@
-import * as React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Authenticator, UsernameAttributes } from 'aws-amplify-react'
 import { Auth } from 'aws-amplify'
 import { ICredentials } from '@aws-amplify/core'
 import { signUpWithEmailFields } from 'aws-amplify-react/lib/Auth/common/default-sign-up-fields'
 
-export const Authenticate = ({ children }: React.PropsWithChildren<any>) => {
+export const Authenticate = ({ children }: React.PropsWithChildren<{}>) => {
 	const [credentials, setCredentials] = useState<ICredentials>()
 	return (
 		<>
