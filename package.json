@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx webpack --config-name production",
     "start": "webpack-dev-server --config-name development --open --config ./web/webpack.config.js",
-    "postinstall": "check-node-version --package"
+    "postinstall": "check-node-version --package",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -96,10 +98,12 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.1.0",
+    "snyk": "^1.319.2"
   },
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
-  }
+  },
+  "snyk": true
 }
