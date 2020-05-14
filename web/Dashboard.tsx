@@ -5,13 +5,16 @@ import PQueue from 'p-queue'
 import { SummaryItem } from './summaryToChartData'
 import { Loading } from './Loading'
 import { SummaryChart } from './SummaryChart'
-import { Dashboard as StyledDashboard } from './styles/dashboard.ts'
+import { Dashboard as StyledDashboard } from './styles/dashboard'
 
 const queue = new PQueue({ concurrency: 1 })
 
 const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 	const { athena, workGroup } = athenaContext
-	const [data, setData] = useState<SummaryItem[]>([])
+	const [data, setData] = useState<{
+		items: SummaryItem[]
+		lastUpdated: Date
+	}>()
 
 	useEffect(() => {
 		let isUnmounted = false
@@ -26,20 +29,27 @@ const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 				console.error('[athena]', ...args)
 			},
 		})
-		queue
-			.add(async () =>
+		Promise.all([
+			queue.add(async () =>
 				q({
 					QueryString: `SELECT 
-            protocol,
-            message.op as mccmnc,
-            simIssuer.iin as simIIN,
-            MAX(message.interval) AS maxInterval
-            FROM ${athenaContext.dataBase}.${athenaContext.logTable}
-            WHERE timeout = FALSE and simIssuer IS NOT NULL
-            GROUP BY  1,2,3`,
+				protocol,
+				message.op as mccmnc,
+				simIssuer.iin as simIIN,
+				MAX(message.interval) AS maxInterval
+				FROM ${athenaContext.dataBase}.${athenaContext.logTable}
+				WHERE timeout = FALSE and simIssuer IS NOT NULL
+				GROUP BY  1,2,3`,
 				}),
-			)
-			.then(async (ResultSet) => {
+			),
+			queue.add(async () =>
+				q({
+					QueryString: `SELECT max(date_parse(timestamp, '%Y-%m-%dT%H:%i:%s.%fZ')) as latest
+				FROM ${athenaContext.dataBase}.${athenaContext.logTable}`,
+				}),
+			),
+		])
+			.then(async ([result, latestResultSet]) => {
 				if (isUnmounted) {
 					console.debug(
 						'[Summary]',
@@ -47,12 +57,19 @@ const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 					)
 					return
 				}
-				setData(
-					parseResult({
-						ResultSet,
+				setData({
+					items: parseResult({
+						ResultSet: result,
 						skip: 1,
 					}) as SummaryItem[],
-				)
+					lastUpdated: (parseResult({
+						ResultSet: latestResultSet,
+						skip: 1,
+						formatFields: {
+							latest: (v) => new Date(v),
+						},
+					})[0].latest as unknown) as Date,
+				})
 			})
 			.catch(console.error)
 
@@ -60,7 +77,7 @@ const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 			isUnmounted = true
 		}
 	}, [athenaContext])
-	if (!data.length) return <Loading />
+	if (!data) return <Loading />
 	return <SummaryChart data={data} />
 }
 

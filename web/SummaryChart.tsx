@@ -4,17 +4,25 @@ import * as am4charts from '@amcharts/amcharts4/charts'
 import { v4 } from 'uuid'
 import styled from 'styled-components'
 import { SummaryItem, summaryToChartData } from './summaryToChartData'
+import { formatDistance } from 'date-fns'
 
 const DiagramDiv = styled.div`
 	width: 100%;
 	height: 250px;
 `
 
-export const SummaryChart = ({ data }: { data: SummaryItem[] }) => {
+export const SummaryChart = ({
+	data,
+}: {
+	data: {
+		items: SummaryItem[]
+		lastUpdated: Date
+	}
+}) => {
 	const chartRef = useRef<am4charts.XYChart>()
 	const uuid = useRef<string>(v4())
 
-	const chartData = summaryToChartData(data)
+	const chartData = summaryToChartData(data.items)
 
 	useEffect(() => {
 		const chart = am4core.create(uuid.current, am4charts.XYChart)
@@ -92,5 +100,17 @@ export const SummaryChart = ({ data }: { data: SummaryItem[] }) => {
 			chartRef.current && chartRef.current.dispose()
 		}
 	}, [data])
-	return <DiagramDiv id={uuid.current} />
+	return (
+		<>
+			<DiagramDiv id={uuid.current} />
+			<p>
+				<small>
+					Last updated:{' '}
+					<time dateTime={data.lastUpdated.toISOString()}>
+						{formatDistance(data.lastUpdated, new Date())} ago
+					</time>
+				</small>
+			</p>
+		</>
+	)
 }

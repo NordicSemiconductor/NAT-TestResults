@@ -11,7 +11,7 @@ import {
 export const natLogMessageFields: {
 	[key: string]: Field
 } = {
-	Received: {
+	Timestamp: {
 		type: ScalarFieldType.string,
 	},
 	Protocol: {
