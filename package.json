@@ -92,7 +92,7 @@
     ]
   },
   "dependencies": {
-    "@amcharts/amcharts4": "^4.9.21",
+    "@amcharts/amcharts4": "^4.9.22",
     "@aws-amplify/ui-react": "^0.2.5",
     "aws-amplify": "^3.0.10",
     "aws-amplify-react": "^4.1.9",
