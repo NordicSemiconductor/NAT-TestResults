@@ -47,7 +47,7 @@ jobs:
           cd public
           git init
           git add ./*
-          git commit -m "📦 publish `cat .version | tr -d '\n'`"
+          git commit -m "📦 publish `cat ../.version | tr -d '\n'`"
           git remote add origin https://github.com/${GITHUB_REPOSITORY}.git
           git push -f origin HEAD:gh-pages
       - name: Semantic release
