@@ -25,7 +25,7 @@ const cfg = {
 	entry: path.join(process.cwd(), 'web', 'index.tsx'),
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'dist'),
+		path: path.resolve(process.cwd(), 'public'),
 	},
 	resolve: {
 		extensions: ['.ts', '.tsx', '.mjs', '.js'],
