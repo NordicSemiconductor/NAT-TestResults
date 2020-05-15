@@ -4,6 +4,9 @@ on: push
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  SERVER_STACK_NAME: ${{ secrets.SERVER_STACK_NAME }}
 
 jobs:
   main:
@@ -31,9 +34,10 @@ jobs:
         run: |
           node .github/workflows/get-next-version.js > .version
           cat .version
+      - name: Fetch configuration
+        run: node cli app-config > .env
       - name: Build
         run: |
-          node cli app-config > .env
           export $(cat .env | xargs)
           npm run build
           node scripts/renderIndex.js > public/index.html
