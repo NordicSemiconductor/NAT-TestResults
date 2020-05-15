@@ -36,10 +36,11 @@ const main = async () => {
 			process.stderr.write(stderrBuffer.getContentsAsString('utf8'))
 		}
 		process.stdout.write(pjson.version)
+		process.exit(1)
 	}
 }
 
-main().catch(error => {
+main().catch((error) => {
 	console.error(error.message)
 	process.exit(1)
 })

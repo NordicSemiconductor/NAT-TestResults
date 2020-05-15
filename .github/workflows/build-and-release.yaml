@@ -35,9 +35,10 @@ jobs:
       - name: Test
         run: npm test
       - name: Determine next release version
-        run: |
-          node .github/workflows/get-next-version.js > .version
-          cat .version
+        id: next-version
+        if: endsWith(github.ref, 'saga')
+        continue-on-error: true
+        run: node .github/workflows/get-next-version.js > .version
       - name: Fetch configuration
         run: node cli app-config > .env
       - name: Build
@@ -47,7 +48,9 @@ jobs:
           node scripts/renderIndex.js > public/index.html
           cp web/logo.svg public
       - name: Publish build to gh-pages
-        if: contains(github.ref, 'saga')
+        if:
+          contains(github.ref, 'saga') && steps.next-version.conclusion ==
+          'success'
         run: |
           echo "machine github.com login authtoken password ${GITHUB_TOKEN}" > ~/.netrc
           git config --global user.email "actions@example.com"
