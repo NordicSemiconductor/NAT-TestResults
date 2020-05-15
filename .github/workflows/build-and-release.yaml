@@ -31,6 +31,8 @@ jobs:
           cat .version
       - name: Build
         run: |
+          node cli app-config > .env
+          export $(cat .env | xargs)
           npm run build
           node scripts/renderIndex.js > public/index.html
           cp web/logo.svg public

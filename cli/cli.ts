@@ -54,13 +54,13 @@ export const cli = async (args: {
 	program.description('NAT Test Reporter Command Line Interface')
 	const stackName = args.stackName || defaultStackName
 	const serverStackName = args.serverStackName
-	console.log('Stack name:          ', chalk.yellow(stackName))
-	console.log('Server stack name:   ', chalk.yellow(serverStackName))
+	console.error('Stack name:          ', chalk.yellow(stackName))
+	console.error('Server stack name:   ', chalk.yellow(serverStackName))
 
 	const cfg = await config({ stackName, serverStackName })
 
-	console.log('Logs bucket:         ', cfg.logsBucketName)
-	console.log('Query results bucket:', cfg.queryResultsBucketName)
+	console.error('Logs bucket:         ', cfg.logsBucketName)
+	console.error('Query results bucket:', cfg.queryResultsBucketName)
 
 	const commands: CommandDefinition[] = [
 		athenaCommand({
@@ -96,9 +96,9 @@ export const cli = async (args: {
 				}
 			})
 			.on('--help', () => {
-				console.log('')
-				console.log(chalk.yellow(help))
-				console.log('')
+				console.error('')
+				console.error(chalk.yellow(help))
+				console.error('')
 			})
 		options?.forEach(({ flags, description, defaultValue }) =>
 			cmd.option(flags, description, defaultValue),
