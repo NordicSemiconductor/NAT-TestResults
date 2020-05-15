@@ -108,8 +108,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",
+    "snyk": "^1.321.0",
     "styled-components": "^5.1.0",
-    "snyk": "^1.319.2",
     "uuid": "^8.0.0"
   },
   "engines": {
