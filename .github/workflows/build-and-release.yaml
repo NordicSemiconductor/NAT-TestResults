@@ -32,6 +32,8 @@ jobs:
         run: npm ci --no-audit
       - name: Compile TypeScript
         run: npx tsc
+      - name: Test
+        run: npm test
       - name: Determine next release version
         run: |
           node .github/workflows/get-next-version.js > .version
