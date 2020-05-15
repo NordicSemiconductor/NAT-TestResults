@@ -6,6 +6,8 @@
     "build": "npx webpack --config-name production --config ./web/webpack.config.js",
     "start": "webpack-dev-server --config-name development --open --config ./web/webpack.config.js",
     "postinstall": "check-node-version --package",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect",
     "test": "jest"
   },
   "repository": {
@@ -106,6 +108,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",
+    "snyk": "^1.321.0",
     "styled-components": "^5.1.0",
     "uuid": "^8.0.0"
   },
@@ -129,5 +132,6 @@
         "diagnostics": true
       }
     }
-  }
+  },
+  "snyk": true
 }
