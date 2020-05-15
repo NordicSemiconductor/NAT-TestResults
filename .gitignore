@@ -4,4 +4,4 @@ dist/
 dist-web/
 cdk.out/
 NAT-TestServer
-
+public/

@@ -30,3 +30,7 @@ Set the ID of the stack
 Deploy the server stack to an AWS account
 
     npx cdk deploy $STACK_NAME
+
+## Run the UI
+
+    npm start
