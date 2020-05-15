@@ -1,14 +1,22 @@
-import * as React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Authenticator, UsernameAttributes } from 'aws-amplify-react'
 import { Auth } from 'aws-amplify'
 import { ICredentials } from '@aws-amplify/core'
 import { signUpWithEmailFields } from 'aws-amplify-react/lib/Auth/common/default-sign-up-fields'
+import { LogoWithTitle } from './styles/main'
 
-export const Authenticate = ({ children }: React.PropsWithChildren<any>) => {
+import Logo from './logo.svg'
+
+export const Authenticate = ({ children }: React.PropsWithChildren<{}>) => {
 	const [credentials, setCredentials] = useState<ICredentials>()
 	return (
 		<>
+			{!credentials && (
+				<LogoWithTitle>
+					<Logo />
+					<h1>cellprobe</h1>
+				</LogoWithTitle>
+			)}
 			<Authenticator
 				onStateChange={(authState: string) => {
 					if (authState === 'signedIn') {

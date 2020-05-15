@@ -25,7 +25,7 @@ const cfg = {
 	entry: path.join(process.cwd(), 'web', 'index.tsx'),
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'dist'),
+		path: path.resolve(process.cwd(), 'public'),
 	},
 	resolve: {
 		extensions: ['.ts', '.tsx', '.mjs', '.js'],
@@ -76,7 +76,7 @@ module.exports = [
 		...cfg,
 		name: 'development',
 		mode: 'development',
-		devtool: 'source-map',
+		devtool: 'none',
 		devServer: {
 			contentBase: './web',
 			before: (app, server, compiler) => {
@@ -91,16 +91,6 @@ module.exports = [
 				})
 			},
 			port: 8123,
-		},
-		module: {
-			rules: [
-				...cfg.module.rules,
-				{
-					enforce: 'pre',
-					test: /\.js$/,
-					loader: 'source-map-loader',
-				},
-			],
 		},
 		plugins: [
 			new webpack.DefinePlugin({

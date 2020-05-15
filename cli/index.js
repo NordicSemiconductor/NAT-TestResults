@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { cli } = require('../dist/cli/cli')
+const chalk = require('chalk')
 
 cli({
 	stackName: process.env.STACK_NAME,
