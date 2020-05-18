@@ -156,7 +156,7 @@ export const SummaryChart = ({
 			</p>
 			<h3>TCP</h3>
 			<TimeoutChart chartData={chartData.tcp} color={'#04cecd'} />
-			<h3>TCP</h3>
+			<h3>UDP</h3>
 			<TimeoutChart chartData={chartData.udp} color={'#63c6f5'} />
 		</>
 	)
