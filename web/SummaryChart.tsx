@@ -8,6 +8,7 @@ import {
 	ChartItem,
 } from './summaryToChartData'
 import { formatDistance } from 'date-fns'
+import styled from 'styled-components'
 
 const createGrid = (
 	axis: am4charts.ValueAxis,
@@ -18,6 +19,45 @@ const createGrid = (
 	range.value = minutes
 	range.label.text = label
 }
+
+const ChartContainer = styled.div`
+	display: none;
+	@media (min-width: 1000px) {
+		display: block;
+	}
+`
+
+const FallbackContainer = styled.dl`
+	display: grid;
+	grid-template-columns: 3fr 1fr;
+	width: fit-content;
+	dd,
+	dt {
+		padding-bottom: 0.5rem;
+	}
+	dt {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	dd {
+		text-align: right;
+	}
+	@media (min-width: 1000px) {
+		display: none;
+	}
+`
+
+const MobileFallback = ({ chartData }: { chartData: ChartItem[] }) => (
+	<FallbackContainer>
+		{chartData.map((item, k) => (
+			<React.Fragment key={k}>
+				<dt>{item.networkIdentifier}</dt>
+				<dd>{Math.round(item.maxIntervalMinutes)}</dd>
+			</React.Fragment>
+		))}
+	</FallbackContainer>
+)
 
 const TimeoutChart = ({
 	chartData,
@@ -34,7 +74,7 @@ const TimeoutChart = ({
 		chartRef.current = chart
 
 		// Use only absolute numbers
-		chart.numberFormatter.numberFormat = '#.#s'
+		chart.numberFormatter.numberFormat = '#.s'
 
 		// Create axes
 		const networkAxis = chart.yAxes.push(new am4charts.CategoryAxis())
@@ -81,13 +121,16 @@ const TimeoutChart = ({
 		}
 	}, [chartData])
 	return (
-		<div
-			style={{
-				width: '100%',
-				height: `${chartData.length * 50 + 75}px`,
-			}}
-			id={chartId.current}
-		/>
+		<>
+			<ChartContainer
+				style={{
+					width: '100%',
+					height: `${chartData.length * 50 + 75}px`,
+				}}
+				id={chartId.current}
+			/>
+			<MobileFallback chartData={chartData} />
+		</>
 	)
 }
 
@@ -113,7 +156,7 @@ export const SummaryChart = ({
 			</p>
 			<h3>TCP</h3>
 			<TimeoutChart chartData={chartData.tcp} color={'#04cecd'} />
-			<h3>UDP</h3>
+			<h3>TCP</h3>
 			<TimeoutChart chartData={chartData.udp} color={'#63c6f5'} />
 		</>
 	)

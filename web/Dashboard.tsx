@@ -101,7 +101,7 @@ const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 	return <SummaryChart data={data} />
 }
 
-const LastSeenList = styled.dl`
+const DeviceList = styled.dl`
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	width: fit-content;
@@ -164,7 +164,7 @@ const LastSeenDevices = ({
 	}, [athenaContext])
 	if (!lastSeen) return <Loading />
 	return (
-		<LastSeenList>
+		<DeviceList>
 			{lastSeen
 				.sort(
 					({ lastSeen: t1 }, { lastSeen: t2 }) => t2.getTime() - t1.getTime(),
@@ -181,7 +181,7 @@ const LastSeenDevices = ({
 						</dd>
 					</React.Fragment>
 				))}
-		</LastSeenList>
+		</DeviceList>
 	)
 }
 
