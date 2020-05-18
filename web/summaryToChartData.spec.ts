@@ -45,29 +45,35 @@ describe('summaryToChartData', () => {
 			tcp: [
 				{
 					networkIdentifier: 'Telia (Telia Sonera A/S)',
-					maxInterval: 11524 / 60,
+					maxInterval: 11524,
+					maxIntervalMinutes: 11524 / 60,
 				},
 				{
 					networkIdentifier: 'Telenor (KPN Telecom B.V., Card Services)',
-					maxInterval: 5122 / 60,
+					maxInterval: 5122,
+					maxIntervalMinutes: 5122 / 60,
 				},
 				{
 					networkIdentifier: 'Telenor (1NCE GmbH)',
-					maxInterval: 675 / 60,
+					maxInterval: 675,
+					maxIntervalMinutes: 675 / 60,
 				},
 			],
 			udp: [
 				{
 					networkIdentifier: 'Telenor (1NCE GmbH)',
-					maxInterval: 121 / 60,
+					maxInterval: 121,
+					maxIntervalMinutes: 121 / 60,
 				},
 				{
 					networkIdentifier: 'Telia (Telia Sonera A/S)',
-					maxInterval: 64 / 60,
+					maxInterval: 64,
+					maxIntervalMinutes: 64 / 60,
 				},
 				{
 					networkIdentifier: 'Telenor (KPN Telecom B.V., Card Services)',
-					maxInterval: 49 / 60,
+					maxInterval: 49,
+					maxIntervalMinutes: 49 / 60,
 				},
 			],
 		})

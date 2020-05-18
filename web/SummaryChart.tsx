@@ -40,17 +40,19 @@ const TimeoutChart = ({
 		timeoutAxis.min = 0
 		timeoutAxis.max =
 			chartData.reduce(
-				(max, { maxInterval }) => (maxInterval > max ? maxInterval : max),
+				(max, { maxIntervalMinutes }) =>
+					maxIntervalMinutes > max ? maxIntervalMinutes : max,
 				0,
 			) * 1.1
 
 		// Create series
 		const series = chart.series.push(new am4charts.ColumnSeries())
-		series.dataFields.valueX = 'maxInterval'
+		series.dataFields.valueX = 'maxIntervalMinutes'
 		series.dataFields.categoryY = 'networkIdentifier'
 		series.clustered = false
 		series.fill = am4core.color(color)
 		series.stroke = am4core.color(color)
+		series.columns.template.tooltipText = '[bold]{maxInterval} seconds[/]'
 
 		const bullet = series.bullets.push(new am4charts.LabelBullet())
 		bullet.label.text = '{valueX}'
