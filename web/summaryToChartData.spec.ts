@@ -41,22 +41,35 @@ describe('summaryToChartData', () => {
 					maxInterval: 11524,
 				},
 			]),
-		).toEqual([
-			{
-				networkIdentifier: 'Telia, SIM: Telia Sonera A/S',
-				maxTCP: 11524 / 60,
-				maxUDP: -64 / 60,
-			},
-			{
-				networkIdentifier: 'Telenor, SIM: KPN Telecom B.V., Card Services',
-				maxTCP: 5122 / 60,
-				maxUDP: -49 / 60,
-			},
-			{
-				networkIdentifier: 'Telenor, SIM: 1NCE GmbH',
-				maxTCP: 675 / 60,
-				maxUDP: -121 / 60,
-			},
-		])
+		).toEqual({
+			tcp: [
+				{
+					networkIdentifier: 'Telia (Telia Sonera A/S)',
+					maxInterval: 11524 / 60,
+				},
+				{
+					networkIdentifier: 'Telenor (KPN Telecom B.V., Card Services)',
+					maxInterval: 5122 / 60,
+				},
+				{
+					networkIdentifier: 'Telenor (1NCE GmbH)',
+					maxInterval: 675 / 60,
+				},
+			],
+			udp: [
+				{
+					networkIdentifier: 'Telenor (1NCE GmbH)',
+					maxInterval: 121 / 60,
+				},
+				{
+					networkIdentifier: 'Telia (Telia Sonera A/S)',
+					maxInterval: 64 / 60,
+				},
+				{
+					networkIdentifier: 'Telenor (KPN Telecom B.V., Card Services)',
+					maxInterval: 49 / 60,
+				},
+			],
+		})
 	})
 })

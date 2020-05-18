@@ -103,6 +103,7 @@
     "date-fns": "^2.13.0",
     "e118-iin-list": "^1.4.0",
     "fp-ts": "^2.6.1",
+    "localforage": "^1.7.3",
     "mcc-mnc-list": "^1.1.2",
     "p-queue": "^6.4.0",
     "react": "^16.13.1",

@@ -6,6 +6,8 @@ import { SummaryItem } from './summaryToChartData'
 import { Loading } from './Loading'
 import { SummaryChart } from './SummaryChart'
 import { Dashboard as StyledDashboard } from './styles/dashboard'
+import { cache } from './cache'
+import { endOfHour } from 'date-fns'
 
 const queue = new PQueue({ concurrency: 1 })
 
@@ -29,9 +31,17 @@ const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 				console.error('[athena]', ...args)
 			},
 		})
+		// Cache until end of hour plus 2 minutes (new results will come in every hour)
+		const cacheInMinutes =
+			Math.ceil(
+				endOfHour(new Date()).getTime() / 1000 / 60 - Date.now() / 1000 / 60,
+			) + 2
 		Promise.all([
 			queue.add(async () =>
-				q({
+				cache(
+					q,
+					cacheInMinutes,
+				)({
 					QueryString: `SELECT 
 				protocol,
 				message.op as mccmnc,
@@ -40,16 +50,34 @@ const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 				FROM ${athenaContext.dataBase}.${athenaContext.logTable}
 				WHERE timeout = FALSE and simIssuer IS NOT NULL
 				GROUP BY  1,2,3`,
-				}),
+				}).then(
+					(result) =>
+						parseResult({
+							ResultSet: result,
+							skip: 1,
+						}) as SummaryItem[],
+				),
 			),
 			queue.add(async () =>
-				q({
+				cache(
+					q,
+					cacheInMinutes,
+				)({
 					QueryString: `SELECT max(date_parse(timestamp, '%Y-%m-%dT%H:%i:%s.%fZ')) as latest
 				FROM ${athenaContext.dataBase}.${athenaContext.logTable}`,
-				}),
+				}).then(
+					(result) =>
+						(parseResult({
+							ResultSet: result,
+							skip: 1,
+							formatFields: {
+								latest: (v) => new Date(v),
+							},
+						})[0].latest as unknown) as Date,
+				),
 			),
 		])
-			.then(async ([result, latestResultSet]) => {
+			.then(async ([items, lastUpdated]) => {
 				if (isUnmounted) {
 					console.debug(
 						'[Summary]',
@@ -58,17 +86,8 @@ const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 					return
 				}
 				setData({
-					items: parseResult({
-						ResultSet: result,
-						skip: 1,
-					}) as SummaryItem[],
-					lastUpdated: (parseResult({
-						ResultSet: latestResultSet,
-						skip: 1,
-						formatFields: {
-							latest: (v) => new Date(v),
-						},
-					})[0].latest as unknown) as Date,
+					items,
+					lastUpdated,
 				})
 			})
 			.catch(console.error)
