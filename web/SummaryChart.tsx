@@ -103,10 +103,6 @@ export const SummaryChart = ({
 
 	return (
 		<>
-			<h3>TCP</h3>
-			<TimeoutChart chartData={chartData.tcp} color={'#04cecd'} />
-			<h3>UDP</h3>
-			<TimeoutChart chartData={chartData.udp} color={'#63c6f5'} />
 			<p>
 				<small>
 					Last udpated:{' '}
@@ -115,6 +111,10 @@ export const SummaryChart = ({
 					</time>
 				</small>
 			</p>
+			<h3>TCP</h3>
+			<TimeoutChart chartData={chartData.tcp} color={'#04cecd'} />
+			<h3>UDP</h3>
+			<TimeoutChart chartData={chartData.udp} color={'#63c6f5'} />
 		</>
 	)
 }

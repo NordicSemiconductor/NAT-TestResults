@@ -7,7 +7,8 @@ import { Loading } from './Loading'
 import { SummaryChart } from './SummaryChart'
 import { Dashboard as StyledDashboard } from './styles/dashboard'
 import { cache } from './cache'
-import { endOfHour } from 'date-fns'
+import { endOfHour, formatDistanceToNow } from 'date-fns'
+import styled from 'styled-components'
 
 const queue = new PQueue({ concurrency: 1 })
 
@@ -100,6 +101,90 @@ const Summary = ({ athenaContext }: { athenaContext: AthenaContext }) => {
 	return <SummaryChart data={data} />
 }
 
+const LastSeenList = styled.dl`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	width: fit-content;
+`
+
+const LastSeenDevices = ({
+	athenaContext,
+}: {
+	athenaContext: AthenaContext
+}) => {
+	const { athena, workGroup } = athenaContext
+	const [lastSeen, setLastSeen] = useState<{ imei: string; lastSeen: Date }[]>()
+
+	useEffect(() => {
+		let isUnmounted = false
+
+		const q = query({
+			WorkGroup: workGroup,
+			athena,
+			debugLog: (...args: any) => {
+				console.debug('[athena]', ...args)
+			},
+			errorLog: (...args: any) => {
+				console.error('[athena]', ...args)
+			},
+		})
+		queue
+			.add(async () =>
+				cache(
+					q,
+					5,
+				)({
+					QueryString: `SELECT message.imei as imei, MAX(timestamp) as lastSeen FROM ${athenaContext.dataBase}.${athenaContext.logTable} WHERE message.imei IS NOT NULL GROUP BY 1`,
+				}).then(
+					(result) =>
+						(parseResult({
+							ResultSet: result,
+							skip: 1,
+							formatFields: {
+								lastSeen: (v) => new Date(v),
+							},
+						}) as unknown) as { imei: string; lastSeen: Date }[],
+				),
+			)
+			.then(async (lastSeen) => {
+				if (isUnmounted) {
+					console.debug(
+						'[LastSeenDevices]',
+						'Received result, but was removed already.',
+					)
+					return
+				}
+				setLastSeen(lastSeen)
+			})
+			.catch(console.error)
+
+		return () => {
+			isUnmounted = true
+		}
+	}, [athenaContext])
+	if (!lastSeen) return <Loading />
+	return (
+		<LastSeenList>
+			{lastSeen
+				.sort(
+					({ lastSeen: t1 }, { lastSeen: t2 }) => t2.getTime() - t1.getTime(),
+				)
+				.map(({ imei, lastSeen }, k) => (
+					<React.Fragment key={k}>
+						<dt>
+							<code>{imei}</code>
+						</dt>
+						<dd>
+							<time dateTime={lastSeen.toISOString()}>
+								{formatDistanceToNow(lastSeen)} ago
+							</time>
+						</dd>
+					</React.Fragment>
+				))}
+		</LastSeenList>
+	)
+}
+
 export const Dashboard = () => (
 	<AthenaConsumer>
 		{(athenaContext) => (
@@ -107,6 +192,10 @@ export const Dashboard = () => (
 				<section>
 					<h2>Max keep-alive in minutes</h2>
 					<Summary athenaContext={athenaContext} />
+				</section>
+				<section>
+					<h2>Last seen devices</h2>
+					<LastSeenDevices athenaContext={athenaContext} />
 				</section>
 			</StyledDashboard>
 		)}
