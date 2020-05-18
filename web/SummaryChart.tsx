@@ -9,6 +9,16 @@ import {
 } from './summaryToChartData'
 import { formatDistance } from 'date-fns'
 
+const createGrid = (
+	axis: am4charts.ValueAxis,
+	minutes: number,
+	label: string,
+) => {
+	const range = axis.axisRanges.create()
+	range.value = minutes
+	range.label.text = label
+}
+
 const TimeoutChart = ({
 	chartData,
 	color,
@@ -34,9 +44,8 @@ const TimeoutChart = ({
 
 		const timeoutAxis = chart.xAxes.push(new am4charts.ValueAxis())
 		timeoutAxis.renderer.minGridDistance = 50
-		timeoutAxis.renderer.ticks.template.length = 5
-		timeoutAxis.renderer.ticks.template.disabled = false
-		timeoutAxis.renderer.ticks.template.strokeOpacity = 0.4
+		timeoutAxis.renderer.grid.template.disabled = true
+		timeoutAxis.renderer.labels.template.disabled = true
 		timeoutAxis.min = 0
 		timeoutAxis.max =
 			chartData.reduce(
@@ -44,6 +53,10 @@ const TimeoutChart = ({
 					maxIntervalMinutes > max ? maxIntervalMinutes : max,
 				0,
 			) * 1.1
+
+		for (let i = 1; i <= 24; i++) {
+			createGrid(timeoutAxis, 60 * i, `${i}h`)
+		}
 
 		// Create series
 		const series = chart.series.push(new am4charts.ColumnSeries())
@@ -54,12 +67,12 @@ const TimeoutChart = ({
 		series.stroke = am4core.color(color)
 		series.columns.template.tooltipText = '[bold]{maxInterval} seconds[/]'
 
-		const bullet = series.bullets.push(new am4charts.LabelBullet())
-		bullet.label.text = '{valueX}'
-		bullet.label.hideOversized = false
-		bullet.label.truncate = false
-		bullet.label.horizontalCenter = 'left'
-		bullet.label.dx = 10
+		const timeoutLabel = series.bullets.push(new am4charts.LabelBullet())
+		timeoutLabel.label.text = '{valueX}'
+		timeoutLabel.label.hideOversized = false
+		timeoutLabel.label.truncate = false
+		timeoutLabel.label.horizontalCenter = 'left'
+		timeoutLabel.label.dx = 10
 
 		chart.data = chartData
 
