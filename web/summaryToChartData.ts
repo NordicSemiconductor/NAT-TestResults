@@ -17,7 +17,6 @@ export type SummaryItem = {
 export type ChartItem = {
 	networkIdentifier: string
 	maxInterval: number
-	maxIntervalMinutes: number
 }
 
 const identifyNetwork = (summary: SummaryItem): string => {
@@ -38,7 +37,6 @@ const summarize = (summary: SummaryItem[], protocol: Protocol) =>
 		.sort(({ maxInterval: i1 }, { maxInterval: i2 }) => i2 - i1)
 		.map((summary) => ({
 			networkIdentifier: identifyNetwork(summary),
-			maxIntervalMinutes: summary.maxInterval / 60,
 			maxInterval: summary.maxInterval,
 		}))
 

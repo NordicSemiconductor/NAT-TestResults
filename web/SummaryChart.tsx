@@ -10,14 +10,16 @@ import {
 import { formatDistance } from 'date-fns'
 import styled from 'styled-components'
 
-const createGrid = (
-	axis: am4charts.ValueAxis,
-	minutes: number,
-	label: string,
-) => {
+const createHour = (axis: am4charts.ValueAxis, hour: number) => {
 	const range = axis.axisRanges.create()
-	range.value = minutes
-	range.label.text = label
+	range.value = hour * 60 * 60
+	range.label.text = `${hour}h`
+}
+
+const createMinute = (axis: am4charts.ValueAxis, minute: number) => {
+	const range = axis.axisRanges.create()
+	range.value = minute * 60
+	range.label.text = `${minute}m`
 }
 
 const ChartContainer = styled.div`
@@ -53,7 +55,7 @@ const MobileFallback = ({ chartData }: { chartData: ChartItem[] }) => (
 		{chartData.map((item, k) => (
 			<React.Fragment key={k}>
 				<dt>{item.networkIdentifier}</dt>
-				<dd>{Math.round(item.maxIntervalMinutes)}</dd>
+				<dd>{item.maxInterval}</dd>
 			</React.Fragment>
 		))}
 	</FallbackContainer>
@@ -84,28 +86,38 @@ const TimeoutChart = ({
 
 		const timeoutAxis = chart.xAxes.push(new am4charts.ValueAxis())
 		timeoutAxis.renderer.minGridDistance = 50
-		timeoutAxis.renderer.grid.template.disabled = true
-		timeoutAxis.renderer.labels.template.disabled = true
+
 		timeoutAxis.min = 0
 		timeoutAxis.max =
 			chartData.reduce(
-				(max, { maxIntervalMinutes }) =>
-					maxIntervalMinutes > max ? maxIntervalMinutes : max,
+				(max, { maxInterval }) => (maxInterval > max ? maxInterval : max),
 				0,
 			) * 1.1
 
-		for (let i = 1; i <= 24; i++) {
-			createGrid(timeoutAxis, 60 * i, `${i}h`)
+		timeoutAxis.renderer.grid.template.disabled = true
+		timeoutAxis.renderer.labels.template.disabled = true
+
+		if (timeoutAxis.max > 3600) {
+			for (let i = 1; i <= 24; i++) {
+				createHour(timeoutAxis, i)
+			}
+		} else if (timeoutAxis.max > 300) {
+			for (let i = 1; i <= 60; i += 5) {
+				createMinute(timeoutAxis, i)
+			}
+		} else {
+			for (let i = 1; i <= 5; i++) {
+				createMinute(timeoutAxis, i)
+			}
 		}
 
 		// Create series
 		const series = chart.series.push(new am4charts.ColumnSeries())
-		series.dataFields.valueX = 'maxIntervalMinutes'
+		series.dataFields.valueX = 'maxInterval'
 		series.dataFields.categoryY = 'networkIdentifier'
 		series.clustered = false
 		series.fill = am4core.color(color)
 		series.stroke = am4core.color(color)
-		series.columns.template.tooltipText = '[bold]{maxInterval} seconds[/]'
 
 		const timeoutLabel = series.bullets.push(new am4charts.LabelBullet())
 		timeoutLabel.label.text = '{valueX}'

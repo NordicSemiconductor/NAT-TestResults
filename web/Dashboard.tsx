@@ -190,7 +190,7 @@ export const Dashboard = () => (
 		{(athenaContext) => (
 			<StyledDashboard>
 				<section>
-					<h2>Max keep-alive in minutes</h2>
+					<h2>Max keep-alive</h2>
 					<Summary athenaContext={athenaContext} />
 				</section>
 				<section>
