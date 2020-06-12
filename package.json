@@ -99,7 +99,7 @@
     "@amcharts/amcharts4": "^4.9.23",
     "@aws-amplify/ui-react": "^0.2.6",
     "aws-amplify": "^3.0.11",
-    "aws-amplify-react": "^4.1.10",
+    "aws-amplify-react": "^4.1.11",
     "date-fns": "^2.14.0",
     "e118-iin-list": "^1.4.0",
     "fp-ts": "^2.6.1",
