@@ -129,7 +129,7 @@ const TimeoutChart = ({
 		chart.data = chartData
 
 		return () => {
-			chartRef.current && chartRef.current.dispose()
+			chartRef.current?.dispose()
 		}
 	}, [chartData])
 	return (

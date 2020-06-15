@@ -50,9 +50,9 @@ export const cli = async (args: {
 	stackName?: string
 	serverStackName: string
 	region: string
-}) => {
+}): Promise<void> => {
 	program.description('NAT Test Reporter Command Line Interface')
-	const stackName = args.stackName || defaultStackName
+	const stackName = args.stackName ?? defaultStackName
 	const serverStackName = args.serverStackName
 	console.error('Stack name:          ', chalk.yellow(stackName))
 	console.error('Server stack name:   ', chalk.yellow(serverStackName))

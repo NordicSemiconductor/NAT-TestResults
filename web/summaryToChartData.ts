@@ -26,9 +26,7 @@ const identifyNetwork = (summary: SummaryItem): string => {
 		simIssuer = issuer.value.companyName
 	}
 	const op = filterOperator({ mccmnc: summary.mccmnc })[0]
-	return `${
-		op ? op.brand : `Unknown operator (${summary.mccmnc})`
-	} (${simIssuer})`
+	return `${op?.brand ?? `Unknown operator (${summary.mccmnc})`} (${simIssuer})`
 }
 
 const summarize = (summary: SummaryItem[], protocol: Protocol) =>

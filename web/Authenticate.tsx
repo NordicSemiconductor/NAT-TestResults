@@ -7,7 +7,9 @@ import { LogoWithTitle } from './styles/main'
 
 import Logo from './logo.svg'
 
-export const Authenticate = ({ children }: React.PropsWithChildren<{}>) => {
+export const Authenticate = ({
+	children,
+}: React.PropsWithChildren<Record<string, unknown>>) => {
 	const [credentials, setCredentials] = useState<ICredentials>()
 	return (
 		<>
