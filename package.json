@@ -98,7 +98,7 @@
   "dependencies": {
     "@amcharts/amcharts4": "^4.9.27",
     "@aws-amplify/ui-react": "^0.2.9",
-    "aws-amplify": "^3.0.18",
+    "aws-amplify": "^3.0.19",
     "aws-amplify-react": "^4.1.17",
     "date-fns": "^2.14.0",
     "e118-iin-list": "^1.5.0",
