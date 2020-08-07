@@ -100,7 +100,7 @@
     "@aws-amplify/ui-react": "^0.2.9",
     "aws-amplify": "^3.0.18",
     "aws-amplify-react": "^4.1.17",
-    "date-fns": "^2.14.0",
+    "date-fns": "^2.15.0",
     "e118-iin-list": "^1.5.0",
     "fp-ts": "^2.6.6",
     "localforage": "^1.7.4",
